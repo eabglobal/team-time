@@ -7,6 +7,7 @@ shinyUI(fluidPage(
   
   fluidRow(
     rHandsontableOutput("hot"),
-    column(width=6, "graph")
+    radioButtons("plotType", label="By", choices=c("Person", "Area"), inline=TRUE),
+    plotOutput("teamPlot")
   )
 ))
