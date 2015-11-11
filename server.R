@@ -16,8 +16,8 @@ shinyServer(function(input, output, session) {
   
   observeEvent(input$savebutton, {
     message("save")
-    dates <- input$dateRange
-    df <- values[["hot"]]
+    dates <<- input$dateRange
+    df <<- values[["hot"]]
     save(dates, df, file="ds-team-time.Rout", ascii=TRUE)
   })
   
