@@ -1,13 +1,15 @@
 library(shiny)
+library(shinydashboard)
 library(rhandsontable)
 
-shinyUI(fluidPage(
-  titlePanel("EAB Data Science Team"),
-  title = "EAB Data Science Team",
-  
-  fluidRow(
+dashboardPage(
+  dashboardHeader(title="EAB Data Science Team Time"),
+  dashboardSidebar(disable=TRUE),
+  dashboardBody(
     rHandsontableOutput("hot"),
     radioButtons("plotType", label="By", choices=c("Person", "Area"), inline=TRUE),
     plotOutput("teamPlot")
-  )
-))
+  ),
+  skin="black",
+  title="DS Team Time"
+)

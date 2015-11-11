@@ -4,6 +4,8 @@ library(ggplot2)
 library(tidyr)
 library(eabdslib)
 
+options(stringsAsFactors = FALSE)
+
 df <- data.frame(Person=c("Harlan", "Parsa", "Jay", "Leo"),
                  Development=as.integer(c(1,2,3,7)),
                  Service=as.integer(c(1,2,3,1)),
@@ -50,7 +52,7 @@ shinyServer(function(input, output, session) {
   output$hot <- renderRHandsontable({
     message("hot")
     rhandsontable(data()) %>%
-      hot_col("Person", readOnly = TRUE) %>%
+      hot_col("Person", readOnly = FALSE) %>%
       hot_col("Development", readOnly = FALSE) %>%
       hot_col("Service", readOnly = FALSE) %>%
       hot_col("Research", readOnly = FALSE) %>%
