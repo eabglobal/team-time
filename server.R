@@ -6,16 +6,20 @@ library(eabdslib)
 
 options(stringsAsFactors = FALSE)
 
-df <- data.frame(Person=c("Harlan", "Parsa", "Jay", "Leo"),
-                 Development=as.integer(c(1,2,3,7)),
-                 Service=as.integer(c(1,2,3,1)),
-                 Research=as.integer(c(0,5,0,0)),
-                 TeamDevelopment=as.integer(c(1,1,1,1)),
-                 TimeOff=as.integer(c(0,0,0,1)))
+load("ds-team-time.Rout") # df and dates
 
 shinyServer(function(input, output, session) {
 
   values = reactiveValues()
+  
+  updateDateRangeInput(session, "dateRange", start=dates[[1]], end=dates[[2]])
+  
+  observeEvent(input$savebutton, {
+    message("save")
+    dates <- input$dateRange
+    df <- values[["hot"]]
+    save(dates, df, file="ds-team-time.Rout", ascii=TRUE)
+  })
   
   data = reactive({
     message("data")
