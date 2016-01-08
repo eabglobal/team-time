@@ -2,7 +2,6 @@ library(shiny)
 library(rhandsontable)
 library(ggplot2)
 library(tidyr)
-library(eabdslib)
 
 options(stringsAsFactors = FALSE)
 
@@ -39,15 +38,12 @@ shinyServer(function(input, output, session) {
       ggplot(hot_df, aes(Area, Days, fill=Person)) + 
         geom_bar(stat='identity') +
         xlab("") +
-        coord_flip() +
-        theme_eab()
+        coord_flip() 
     } else {
       ggplot(hot_df, aes(Person, Days, fill=Area)) + 
         geom_bar(stat='identity') +
-        scale_fill_manual(values=eab_color$colors) +
         xlab("") +
-        coord_flip() +
-        theme_eab()
+        coord_flip() 
     }
     
     print(p)

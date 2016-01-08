@@ -2,8 +2,10 @@ library(shiny)
 library(shinydashboard)
 library(rhandsontable)
 
+title <- paste("Team Team:", team_name)
+
 dashboardPage(
-  dashboardHeader(title="EAB Data Science Team Time"),
+  dashboardHeader(title=title),
   dashboardSidebar(disable=TRUE),
   dashboardBody(
     dateRangeInput("dateRange", "For Dates"),
@@ -16,5 +18,5 @@ dashboardPage(
     plotOutput("teamPlot")
   ),
   skin="black",
-  title="DS Team Time"
+  title=title
 )
