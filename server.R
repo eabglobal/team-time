@@ -2,28 +2,45 @@ library(shiny)
 library(rhandsontable)
 library(ggplot2)
 library(tidyr)
+library(magrittr)
 
 options(stringsAsFactors = FALSE)
 
-load("ds-team-time.Rout") # df and dates
-
 shinyServer(function(input, output, session) {
-
+  
+  curFileName <- reactive({
+    message("curFileName")
+    if (input$curPrevRadio == "Current") "team-time-curr.Rout" else "team-time-next.Rout"
+  })
+  
+  file_dates <- reactive({
+    message("file_dates")
+    readRDS(curFileName())$dates
+  })
+  file_table <- reactive({
+    message("file_df")
+    readRDS(curFileName())$table
+  })
+  
   values = reactiveValues()
   
-  updateDateRangeInput(session, "dateRange", start=dates[[1]], end=dates[[2]])
+  observe({
+    message("updateDateRange")
+    updateDateRangeInput(session, "dateRange", start=file_dates()[[1]], end=file_dates()[[2]])
+  })
+  
   
   observeEvent(input$savebutton, {
     message("save")
-    dates <<- input$dateRange
-    df <<- values[["hot"]]
-    save(dates, df, file="ds-team-time.Rout", ascii=TRUE)
+    state_obj <- list(dates=input$dateRange, table=values[["hot"]])
+    
+    saveRDS(state_obj, file=curFileName())
   })
   
   data = reactive({
     message("data")
     values[["hot"]] <- if (is.null(input$hot)) {
-      df
+      file_table()
     } else {
       hot_to_r(input$hot)
     }
@@ -51,14 +68,14 @@ shinyServer(function(input, output, session) {
   
   output$hot <- renderRHandsontable({
     message("hot")
-    rhandsontable(data()) %>%
-      hot_col("Person", readOnly = FALSE) %>%
-      hot_col("Development", readOnly = FALSE) %>%
-      hot_col("Service", readOnly = FALSE) %>%
-      hot_col("Research", readOnly = FALSE) %>%
-      hot_col("TeamDevelopment", readOnly = FALSE) %>%
-      hot_col("TimeOff", readOnly = FALSE) %>%
-      hot_context_menu(allowRowEdit = TRUE, allowColEdit = FALSE)
+    ret <- rhandsontable(data()) %>%
+      hot_col("Person", readOnly = FALSE) 
+    for (cc in colnames(data())) {
+      if (cc != "Person") {
+        ret %<>% hot_col(cc, readOnly = FALSE)
+      }
+    }
+    ret %>% hot_context_menu(allowRowEdit = TRUE, allowColEdit = TRUE)
   })
 
 })
