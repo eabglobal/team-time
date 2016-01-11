@@ -7,7 +7,7 @@ team members' time is allocated over a period of time, such as a two-week sprint
 It was written by Harlan Harris for the Data Science team at [EAB](http://eab.com), and is
 MIT licensed, so you can use it wherever you like.
 
-Source is on GitHub. Contributions very welcome!
+Source is on [GitHub](https://github.com/advisory/team-time). Contributions very welcome!
 
 Usage
 -----
